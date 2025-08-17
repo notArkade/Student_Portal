@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 interface Student {
   name: string;
-  class: string;
-  roll: string;
+  class?: number;
+  roll?: number;
   gender: string;
 }
 
@@ -11,8 +11,8 @@ function StudentRecords() {
   const [students, setStudents] = useState<Student[]>();
   const [newStudent, setNewStudent] = useState<Student>({
     name: "",
-    class: "",
-    roll: "",
+    class: undefined,
+    roll: undefined,
     gender: "",
   });
 
@@ -24,7 +24,10 @@ function StudentRecords() {
     const { name, value } = e.target;
     setNewStudent({
       ...newStudent,
-      [name]: name === "roll" || name === "class" ? Number(value) : value,
+    [name]:
+      name === "roll" || name === "class"
+        ? value === "" ? undefined : Number(value) // allow empty
+        : value,
     });
   };
 
@@ -37,7 +40,7 @@ function StudentRecords() {
 
     if (response.ok) {
       alert("Student added!");
-      setNewStudent({ name: "", class: "", roll: "", gender: "" });
+      setNewStudent({ name: "", class: 0, roll: 0, gender: "" });
       populateStudentData(); // refresh table
     } else {
       alert("Error adding student.");
@@ -88,7 +91,7 @@ function StudentRecords() {
               <input
                 type="number"
                 name="roll"
-                value={newStudent.roll}
+                value={newStudent.roll ?? ""}
                 onChange={handleChange}
                 placeholder="Roll"
                 className="border border-gray-400 text-gray-300 p-1 rounded w-full"
@@ -98,7 +101,7 @@ function StudentRecords() {
               <input
                 type="number"
                 name="class"
-                value={newStudent.class}
+                value={newStudent.class ?? ""}
                 onChange={handleChange}
                 placeholder="Class"
                 className="border border-gray-400 text-gray-300 p-1 rounded w-full"
@@ -111,7 +114,7 @@ function StudentRecords() {
                 onChange={handleChange}
                 className="border border-gray-400 text-gray-400 p-1 rounded w-full"
               >
-                <option value="">Select {""}</option>
+                <option value="">Select</option>
                 <option value="Male">M</option>
                 <option value="Female">F</option>
               </select>
