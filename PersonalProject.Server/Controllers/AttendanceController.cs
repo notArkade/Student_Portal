@@ -21,7 +21,6 @@ namespace PersonalProject.Server.Controllers
         {
             Context.Attendances.Add(new Attendance()
             {
-                //AttendanceId = attendanceDto.AttendanceId,
                 StudentId = attendanceDto.StudentId,
                 AttendanceDate = attendanceDto.AttendanceDate,
             });
@@ -51,7 +50,22 @@ namespace PersonalProject.Server.Controllers
         [HttpPut]
         public IActionResult UpdateAttendance(int studentId, AttendanceDto attendanceDto)
         {
-            
+            var Attendance = Context.Attendances.FirstOrDefault(r => r.StudentId == studentId && r.AttendanceDate == attendanceDto.AttendanceDate);
+
+            if(Attendance != null)
+            {
+                Attendance.StudentId = attendanceDto.StudentId ?? Attendance.StudentId;
+                Attendance.AttendanceDate = attendanceDto.AttendanceDate ?? Attendance.AttendanceDate;
+
+                Context.SaveChanges();
+            } else
+            {
+                return NotFound(new
+                {
+                    message = "Attendance record not found"
+                });
+            }
+
             return Ok(new
             {
                 message = "Attendance succesfully updated"

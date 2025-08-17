@@ -295,3 +295,5 @@ C:\MyProjects\PersonalProject.Server\obj\Debug\net8.0\refint\PersonalProject.Ser
 C:\MyProjects\PersonalProject.Server\obj\Debug\net8.0\PersonalProject.Server.pdb
 C:\MyProjects\PersonalProject.Server\obj\Debug\net8.0\PersonalProject.Server.genruntimeconfig.cache
 C:\MyProjects\PersonalProject.Server\obj\Debug\net8.0\ref\PersonalProject.Server.dll
+C:\MyProjects\PersonalProject.Server\obj\Debug\net8.0\PersonalProject.Server.sourcelink.json
+C:\MyProjects\PersonalProject.Server\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
