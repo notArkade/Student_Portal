@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 interface Student {
+  id?: number;   // ✅ required for Update/Delete
   name: string;
   class?: number;
   roll?: number;
@@ -16,21 +17,26 @@ function StudentRecords() {
     gender: "",
   });
 
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editedStudent, setEditedStudent] = useState<Student | null>(null);
+
   useEffect(() => {
     populateStudentData();
   }, []);
 
+  // Handle new student input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setNewStudent({
       ...newStudent,
-    [name]:
-      name === "roll" || name === "class"
-        ? value === "" ? undefined : Number(value) // allow empty
-        : value,
+      [name]:
+        name === "roll" || name === "class"
+          ? value === "" ? undefined : Number(value)
+          : value,
     });
   };
 
+  // Add student
   const handleAddStudent = async () => {
     const response = await fetch("https://localhost:7230/Student", {
       method: "POST",
@@ -40,10 +46,66 @@ function StudentRecords() {
 
     if (response.ok) {
       alert("Student added!");
-      setNewStudent({ name: "", class: 0, roll: 0, gender: "" });
-      populateStudentData(); // refresh table
+      setNewStudent({ name: "", class: undefined, roll: undefined, gender: "" });
+      populateStudentData();
     } else {
       alert("Error adding student.");
+    }
+  };
+
+  // Start editing
+  const handleEditClick = (index: number) => {
+    setEditingIndex(index);
+    setEditedStudent(students ? { ...students[index] } : null);
+  };
+
+  // Handle edit change
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    if (!editedStudent) return;
+    const { name, value } = e.target;
+    setEditedStudent({
+      ...editedStudent,
+      [name]:
+        name === "roll" || name === "class"
+          ? value === "" ? undefined : Number(value)
+          : value,
+    });
+  };
+
+  // Update student
+  const handleUpdateStudent = async () => {
+    if (!editedStudent || !editedStudent.id) return;
+
+    const response = await fetch(`https://localhost:7230/Student?id=${editedStudent.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(editedStudent),
+    });
+
+    if (response.ok) {
+      alert("Student updated!");
+      setEditingIndex(null);
+      setEditedStudent(null);
+      populateStudentData();
+    } else {
+      alert("Error updating student.");
+    }
+  };
+
+  // Delete student
+  const handleDeleteStudent = async (id?: number) => {
+    if (!id) return;
+    if (!window.confirm("Are you sure you want to delete this student?")) return;
+
+    const response = await fetch(`https://localhost:7230/Student?id=${id}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      alert("Student deleted!");
+      populateStudentData();
+    } else {
+      alert("Error deleting student.");
     }
   };
 
@@ -67,11 +129,84 @@ function StudentRecords() {
               key={idx}
               className="hover:bg-gray-50 transition-all duration-150 text-blue-400 cursor-pointer"
             >
-              <td className="py-2 px-4 border-b border-gray-200">{student.name}</td>
-              <td className="py-2 px-4 border-b border-gray-200">{student.roll}</td>
-              <td className="py-2 px-4 border-b border-gray-200">{student.class}</td>
-              <td className="py-2 px-4 border-b border-gray-200">{student.gender}</td>
-              <td className="py-2 px-4 border-b border-gray-200 text-gray-500">—</td>
+              {editingIndex === idx ? (
+                <>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    <input
+                      type="text"
+                      name="name"
+                      value={editedStudent?.name ?? ""}
+                      onChange={handleEditChange}
+                      className="border border-gray-400 p-1 rounded w-full"
+                    />
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    <input
+                      type="number"
+                      name="roll"
+                      value={editedStudent?.roll ?? ""}
+                      onChange={handleEditChange}
+                      className="border border-gray-400 p-1 rounded w-full"
+                    />
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    <input
+                      type="number"
+                      name="class"
+                      value={editedStudent?.class ?? ""}
+                      onChange={handleEditChange}
+                      className="border border-gray-400 p-1 rounded w-full"
+                    />
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    <select
+                      name="gender"
+                      value={editedStudent?.gender ?? ""}
+                      onChange={handleEditChange}
+                      className="border border-gray-400 p-1 rounded w-full"
+                    >
+                      <option value="">Select</option>
+                      <option value="Male">M</option>
+                      <option value="Female">F</option>
+                    </select>
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200 text-center">
+                    <button
+                      onClick={handleUpdateStudent}
+                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition cursor-pointer mr-2"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => setEditingIndex(null)}
+                      className="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500 transition cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                  </td>
+                </>
+              ) : (
+                <>
+                  <td className="py-2 px-4 border-b border-gray-200">{student.name}</td>
+                  <td className="py-2 px-4 border-b border-gray-200">{student.roll}</td>
+                  <td className="py-2 px-4 border-b border-gray-200">{student.class}</td>
+                  <td className="py-2 px-4 border-b border-gray-200">{student.gender}</td>
+                  <td className="py-2 px-4 border-b border-gray-200 text-center space-x-2">
+                    <button
+                      onClick={() => handleEditClick(idx)}
+                      className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition cursor-pointer"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteStudent(student.id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition cursor-pointer"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </>
+              )}
             </tr>
           ))}
 
@@ -94,7 +229,7 @@ function StudentRecords() {
                 value={newStudent.roll ?? ""}
                 onChange={handleChange}
                 placeholder="Roll"
-                className="border border-gray-400 text-gray-300 p-1 rounded w-full"
+                className="border border-gray-400 text-gray-400 p-1 rounded w-full"
               />
             </td>
             <td className="py-2 px-4 border-b border-gray-200">
@@ -104,7 +239,7 @@ function StudentRecords() {
                 value={newStudent.class ?? ""}
                 onChange={handleChange}
                 placeholder="Class"
-                className="border border-gray-400 text-gray-300 p-1 rounded w-full"
+                className="border border-gray-400 text-gray-400 p-1 rounded w-full"
               />
             </td>
             <td className="py-2 px-4 border-b border-gray-200">
