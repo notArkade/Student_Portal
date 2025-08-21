@@ -33,9 +33,7 @@ function StudentRecords() {
       ...newStudent,
       [name]:
         name === "roll" || name === "class"
-          ? value === ""
-            ? undefined
-            : Number(value)
+          ? value === "" ? undefined : Number(value)
           : value,
     });
   };
@@ -50,12 +48,7 @@ function StudentRecords() {
 
     if (response.ok) {
       alert("Student added!");
-      setNewStudent({
-        name: "",
-        class: undefined,
-        roll: undefined,
-        gender: "",
-      });
+      setNewStudent({ name: "", class: undefined, roll: undefined, gender: "" });
       populateStudentData();
     } else {
       alert("Error adding student.");
@@ -78,9 +71,7 @@ function StudentRecords() {
       ...editedStudent,
       [name]:
         name === "roll" || name === "class"
-          ? value === ""
-            ? undefined
-            : Number(value)
+          ? value === "" ? undefined : Number(value)
           : value,
     });
   };
@@ -111,8 +102,7 @@ function StudentRecords() {
   // Delete student
   const handleDeleteStudent = async (id?: number) => {
     if (!id) return;
-    if (!window.confirm("Are you sure you want to delete this student?"))
-      return;
+    if (!window.confirm("Are you sure you want to delete this student?")) return;
 
     const response = await fetch(`https://localhost:7230/Student?id=${id}`, {
       method: "DELETE",
@@ -126,191 +116,171 @@ function StudentRecords() {
     }
   };
 
+  // ✅ Student Table
   const studentTable =
     students === undefined ? (
       <p className="text-gray-500 text-lg">Loading . . .</p>
     ) : (
-      <table className="min-w-full bg-white shadow-md rounded-xl overflow-hidden">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="py-3 px-4 text-center text-gray-600 font-medium">
-              Name
-            </th>
-            <th className="py-3 px-4 text-center text-gray-600 font-medium">
-              Roll
-            </th>
-            <th className="py-3 px-4 text-center text-gray-600 font-medium">
-              Class
-            </th>
-            <th className="py-3 px-4 text-center text-gray-600 font-medium">
-              Gender
-            </th>
-            <th className="py-3 px-4 text-center text-gray-600 font-medium">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {students.map((student, idx) => (
-            <tr
-              key={idx}
-              className="hover:bg-gray-50 transition-all duration-150 text-blue-400 cursor-pointer"
-            >
-              {editingIndex === idx ? (
-                <>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    <input
-                      type="text"
-                      name="name"
-                      value={editedStudent?.name ?? ""}
-                      onChange={handleEditChange}
-                      className="border border-gray-400 p-1 rounded w-full"
-                    />
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    <input
-                      type="number"
-                      name="roll"
-                      value={editedStudent?.roll ?? ""}
-                      onChange={handleEditChange}
-                      className="border border-gray-400 p-1 rounded w-full"
-                    />
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    <input
-                      type="number"
-                      name="class"
-                      value={editedStudent?.class ?? ""}
-                      onChange={handleEditChange}
-                      className="border border-gray-400 p-1 rounded w-full"
-                    />
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    <select
-                      name="gender"
-                      value={editedStudent?.gender ?? ""}
-                      onChange={handleEditChange}
-                      className="border border-gray-400 p-1 rounded w-full"
-                    >
-                      <option value="">Select</option>
-                      <option value="Male">M</option>
-                      <option value="Female">F</option>
-                    </select>
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 text-center">
-                    <button
-                      onClick={handleUpdateStudent}
-                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition cursor-pointer mr-2"
-                    >
-                      Save
-                    </button>
-                    <button
-                      onClick={() => setEditingIndex(null)}
-                      className="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500 transition cursor-pointer"
-                    >
-                      Cancel
-                    </button>
-                  </td>
-                </>
-              ) : (
-                <>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {student.name}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {student.roll}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {student.class}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {student.gender}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 text-center">
-                    <div className="flex justify-center space-x-4">
-                      <button
-                        onClick={() => handleEditClick(idx)}
-                        className="border border-blue-300 text-blue-300 px-3 py-1 rounded hover:bg-blue-300 hover:text-white transition cursor-pointer"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteStudent(student.id)}
-                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition cursor-pointer"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </>
-              )}
-            </tr>
-          ))}
+      <div className="w-full bg-white shadow-md overflow-hidden">
+        {/* Header */}
+        <div className="grid grid-cols-5 bg-gray-100 font-medium text-gray-600">
+          <div className="py-3 px-4 text-center">Name</div>
+          <div className="py-3 px-4 text-center">Roll</div>
+          <div className="py-3 px-4 text-center">Class</div>
+          <div className="py-3 px-4 text-center">Gender</div>
+          <div className="py-3 px-4 text-center">Actions</div>
+        </div>
 
-          {/* New Student Row */}
-          <tr className="bg-gray-100">
-            <td className="py-2 px-4 border-b border-gray-200">
-              <input
-                type="text"
-                name="name"
-                value={newStudent.name}
-                onChange={handleChange}
-                placeholder="Name"
-                className="border border-gray-400 text-gray-400 p-1 rounded w-full"
-              />
-            </td>
-            <td className="py-2 px-4 border-b border-gray-200">
-              <input
-                type="number"
-                name="roll"
-                value={newStudent.roll ?? ""}
-                onChange={handleChange}
-                placeholder="Roll"
-                className="border border-gray-400 text-gray-400 p-1 rounded w-full"
-              />
-            </td>
-            <td className="py-2 px-4 border-b border-gray-200">
-              <input
-                type="number"
-                name="class"
-                value={newStudent.class ?? ""}
-                onChange={handleChange}
-                placeholder="Class"
-                className="border border-gray-400 text-gray-400 p-1 rounded w-full"
-              />
-            </td>
-            <td className="py-2 px-4 border-b border-gray-200">
-              <select
-                name="gender"
-                value={newStudent.gender}
-                onChange={handleChange}
-                className="border border-gray-400 text-gray-400 p-1 rounded w-full"
-              >
-                <option value="">Select</option>
-                <option value="Male">M</option>
-                <option value="Female">F</option>
-              </select>
-            </td>
-            <td className="py-2 px-4 border-b border-gray-200 text-center">
-              <button
-                onClick={handleAddStudent}
-                className="bg-[#3674B5] text-white px-3 py-1 rounded hover:bg-[#6889ac] transition cursor-pointer"
-              >
-                Add
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        {/* Data Rows */}
+        {students.map((student, idx) => (
+          <div
+            key={idx}
+            className="grid grid-cols-5 border-b border-gray-300 hover:bg-gray-50 transition text-blue-400"
+          >
+            {editingIndex === idx ? (
+              <>
+                <div className="py-2 px-4">
+                  <input
+                    type="text"
+                    name="name"
+                    value={editedStudent?.name ?? ""}
+                    onChange={handleEditChange}
+                    className="border border-gray-400 p-1 rounded w-full"
+                  />
+                </div>
+                <div className="py-2 px-4">
+                  <input
+                    type="number"
+                    name="roll"
+                    value={editedStudent?.roll ?? ""}
+                    onChange={handleEditChange}
+                    className="border border-gray-400 p-1 rounded w-full"
+                  />
+                </div>
+                <div className="py-2 px-4">
+                  <input
+                    type="number"
+                    name="class"
+                    value={editedStudent?.class ?? ""}
+                    onChange={handleEditChange}
+                    className="border border-gray-400 p-1 rounded w-full"
+                  />
+                </div>
+                <div className="py-2 px-4">
+                  <select
+                    name="gender"
+                    value={editedStudent?.gender ?? ""}
+                    onChange={handleEditChange}
+                    className="border border-gray-400 p-1 rounded w-full"
+                  >
+                    <option value="">Select</option>
+                    <option value="Male">M</option>
+                    <option value="Female">F</option>
+                  </select>
+                </div>
+                <div className="py-2 px-4 flex justify-center space-x-4">
+                  <button
+                    onClick={handleUpdateStudent}
+                    className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={() => setEditingIndex(null)}
+                    className="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="py-2 px-4">{student.name}</div>
+                <div className="py-2 px-4">{student.roll}</div>
+                <div className="py-2 px-4">{student.class}</div>
+                <div className="py-2 px-4">{student.gender}</div>
+                <div className="py-2 px-4 flex justify-center space-x-4">
+                  <button
+                    onClick={() => handleEditClick(idx)}
+                    className="border border-blue-300 text-blue-300 px-3 py-1 rounded hover:bg-blue-300 hover:text-white cursor-pointer"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteStudent(student.id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 cursor-pointer"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        ))}
+
+        {/* New Student Row */}
+        <div className="grid grid-cols-5 bg-gray-100">
+          <div className="py-2 px-4">
+            <input
+              type="text"
+              name="name"
+              value={newStudent.name}
+              onChange={handleChange}
+              placeholder="Name"
+              className="border border-gray-400 text-gray-400 p-1 rounded w-full"
+            />
+          </div>
+          <div className="py-2 px-4">
+            <input
+              type="number"
+              name="roll"
+              value={newStudent.roll ?? ""}
+              onChange={handleChange}
+              placeholder="Roll"
+              className="border border-gray-400 text-gray-400 p-1 rounded w-full"
+            />
+          </div>
+          <div className="py-2 px-4">
+            <input
+              type="number"
+              name="class"
+              value={newStudent.class ?? ""}
+              onChange={handleChange}
+              placeholder="Class"
+              className="border border-gray-400 text-gray-400 p-1 rounded w-full"
+            />
+          </div>
+          <div className="py-2 px-4">
+            <select
+              name="gender"
+              value={newStudent.gender}
+              onChange={handleChange}
+              className="border border-gray-400 text-gray-400 p-1 rounded w-full"
+            >
+              <option value="">Select</option>
+              <option value="Male">M</option>
+              <option value="Female">F</option>
+            </select>
+          </div>
+          <div className="py-2 px-4 flex justify-center">
+            <button
+              onClick={handleAddStudent}
+              className="bg-[#3674B5] text-white px-3 py-1 rounded hover:bg-blue-300 cursor-pointer"
+            >
+              Add
+            </button>
+          </div>
+        </div>
+      </div>
     );
 
   return (
-    <>
+    <div className="w-[calc(100vw-16rem)]">
       <h1 className="text-[#3674B5] text-4xl md:text-6xl uppercase tracking-[0.3em] font-extralight mt-20 mb-10">
         Student Data
       </h1>
-      <div className="w-full max-w-4xl">{studentTable}</div>
-    </>
+      <div className="w-full">{studentTable}</div>
+    </div>
   );
 
   async function populateStudentData() {

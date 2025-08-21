@@ -3,12 +3,12 @@
 
 @layer base {
   body{
-    background: linear-gradient(to right, #D1F8EF, #A1E3F9);
+    background: white;
     /* color: red; */
     font-family: 'Roboto Mono', monospace;
   }
 
-  ::-webkit-scrollbar {
+  /* ::-webkit-scrollbar {
     display: none;
   }
   .scroll-hide::-webkit-scrollbar {
@@ -17,9 +17,9 @@
 
   .scroll-hide {
     overflow: hidden;
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  } */
 }
 
 @layer utilities {

@@ -4,21 +4,15 @@ import Navbar from "./Navbar";
 
 const Layout = () => {
   return (
-    <div className="flex h-screen">
-      {/* Sidebar */}
+    <>
       <Sidebar />
-
-      {/* Right section */}
-      <div className="flex-1 ml-60 flex flex-col">
-        {/* Navbar */}
+      <div className="flex flex-col">
         <Navbar />
-
-        {/* Content area - now full height below navbar */}
-        <main className="flex-1 mt-16 p-6 overflow-auto">
+        <main className="fixed left-64 mt-16">
           <Outlet />
         </main>
       </div>
-    </div>
+    </>
   );
 };
 
