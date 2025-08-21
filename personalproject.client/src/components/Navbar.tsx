@@ -6,9 +6,8 @@ const Navbar = () => {
       <div className="flex justify-between items-center w-full">
         <h1 className="text-gray-600 p-8 text-xl">Dashboard</h1>
         <div className="px-8">
-          
-          <RxHamburgerMenu className="text-gray-600" size={32}/>
-          </div>
+          <RxHamburgerMenu className="text-gray-600" size={32} />
+        </div>
       </div>
     </div>
   );

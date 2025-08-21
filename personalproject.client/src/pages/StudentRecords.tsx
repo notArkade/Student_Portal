@@ -116,12 +116,11 @@ function StudentRecords() {
     }
   };
 
-  // ✅ Student Table
   const studentTable =
     students === undefined ? (
       <p className="text-gray-500 text-lg">Loading . . .</p>
     ) : (
-      <div className="w-full bg-white shadow-md overflow-hidden">
+      <div className="w-full bg-white overflow-hidden">
         {/* Header */}
         <div className="grid grid-cols-5 bg-gray-100 font-medium text-gray-600">
           <div className="py-3 px-4 text-center">Name</div>
@@ -208,7 +207,7 @@ function StudentRecords() {
                   </button>
                   <button
                     onClick={() => handleDeleteStudent(student.id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 cursor-pointer"
+                    className="border border-red-300 text-red-300 px-3 py-1 rounded hover:bg-red-500 hover:text-white cursor-pointer"
                   >
                     Delete
                   </button>
@@ -219,7 +218,7 @@ function StudentRecords() {
         ))}
 
         {/* New Student Row */}
-        <div className="grid grid-cols-5 bg-gray-100">
+        <div className="grid grid-cols-5 py-2 bg-gray-100">
           <div className="py-2 px-4">
             <input
               type="text"
@@ -227,7 +226,7 @@ function StudentRecords() {
               value={newStudent.name}
               onChange={handleChange}
               placeholder="Name"
-              className="border border-gray-400 text-gray-400 p-1 rounded w-full"
+              className="border border-gray-400 text-gray-600 p-1 rounded w-full"
             />
           </div>
           <div className="py-2 px-4">
@@ -237,7 +236,7 @@ function StudentRecords() {
               value={newStudent.roll ?? ""}
               onChange={handleChange}
               placeholder="Roll"
-              className="border border-gray-400 text-gray-400 p-1 rounded w-full"
+              className="border border-gray-400 text-gray-600 p-1 rounded w-full"
             />
           </div>
           <div className="py-2 px-4">
@@ -247,7 +246,7 @@ function StudentRecords() {
               value={newStudent.class ?? ""}
               onChange={handleChange}
               placeholder="Class"
-              className="border border-gray-400 text-gray-400 p-1 rounded w-full"
+              className="border border-gray-400 text-gray-600 p-1 rounded w-full"
             />
           </div>
           <div className="py-2 px-4">
@@ -265,7 +264,7 @@ function StudentRecords() {
           <div className="py-2 px-4 flex justify-center">
             <button
               onClick={handleAddStudent}
-              className="bg-[#3674B5] text-white px-3 py-1 rounded hover:bg-blue-300 cursor-pointer"
+              className="bg-blue-300 text-white w-full px-3 py-1 rounded hover:bg-blue-400 cursor-pointer"
             >
               Add
             </button>
@@ -276,9 +275,9 @@ function StudentRecords() {
 
   return (
     <div className="w-[calc(100vw-16rem)]">
-      <h1 className="text-[#3674B5] text-4xl md:text-6xl uppercase tracking-[0.3em] font-extralight mt-20 mb-10">
+      {/* <h1 className="text-[#3674B5] text-4xl md:text-6xl uppercase tracking-[0.3em] font-extralight mt-20 mb-10">
         Student Data
-      </h1>
+      </h1> */}
       <div className="w-full">{studentTable}</div>
     </div>
   );
