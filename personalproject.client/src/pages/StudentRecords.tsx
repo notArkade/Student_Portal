@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 interface Student {
-  id?: number;   // ✅ required for Update/Delete
+  id?: number; // ✅ required for Update/Delete
   name: string;
   class?: number;
   roll?: number;
@@ -25,13 +25,17 @@ function StudentRecords() {
   }, []);
 
   // Handle new student input
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setNewStudent({
       ...newStudent,
       [name]:
         name === "roll" || name === "class"
-          ? value === "" ? undefined : Number(value)
+          ? value === ""
+            ? undefined
+            : Number(value)
           : value,
     });
   };
@@ -46,7 +50,12 @@ function StudentRecords() {
 
     if (response.ok) {
       alert("Student added!");
-      setNewStudent({ name: "", class: undefined, roll: undefined, gender: "" });
+      setNewStudent({
+        name: "",
+        class: undefined,
+        roll: undefined,
+        gender: "",
+      });
       populateStudentData();
     } else {
       alert("Error adding student.");
@@ -60,14 +69,18 @@ function StudentRecords() {
   };
 
   // Handle edit change
-  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleEditChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     if (!editedStudent) return;
     const { name, value } = e.target;
     setEditedStudent({
       ...editedStudent,
       [name]:
         name === "roll" || name === "class"
-          ? value === "" ? undefined : Number(value)
+          ? value === ""
+            ? undefined
+            : Number(value)
           : value,
     });
   };
@@ -76,11 +89,14 @@ function StudentRecords() {
   const handleUpdateStudent = async () => {
     if (!editedStudent || !editedStudent.id) return;
 
-    const response = await fetch(`https://localhost:7230/Student?id=${editedStudent.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(editedStudent),
-    });
+    const response = await fetch(
+      `https://localhost:7230/Student?id=${editedStudent.id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editedStudent),
+      }
+    );
 
     if (response.ok) {
       alert("Student updated!");
@@ -95,7 +111,8 @@ function StudentRecords() {
   // Delete student
   const handleDeleteStudent = async (id?: number) => {
     if (!id) return;
-    if (!window.confirm("Are you sure you want to delete this student?")) return;
+    if (!window.confirm("Are you sure you want to delete this student?"))
+      return;
 
     const response = await fetch(`https://localhost:7230/Student?id=${id}`, {
       method: "DELETE",
@@ -116,11 +133,21 @@ function StudentRecords() {
       <table className="min-w-full bg-white shadow-md rounded-xl overflow-hidden">
         <thead className="bg-gray-100">
           <tr>
-            <th className="py-3 px-4 text-center text-gray-600 font-medium">Name</th>
-            <th className="py-3 px-4 text-center text-gray-600 font-medium">Roll</th>
-            <th className="py-3 px-4 text-center text-gray-600 font-medium">Class</th>
-            <th className="py-3 px-4 text-center text-gray-600 font-medium">Gender</th>
-            <th className="py-3 px-4 text-center text-gray-600 font-medium">Actions</th>
+            <th className="py-3 px-4 text-center text-gray-600 font-medium">
+              Name
+            </th>
+            <th className="py-3 px-4 text-center text-gray-600 font-medium">
+              Roll
+            </th>
+            <th className="py-3 px-4 text-center text-gray-600 font-medium">
+              Class
+            </th>
+            <th className="py-3 px-4 text-center text-gray-600 font-medium">
+              Gender
+            </th>
+            <th className="py-3 px-4 text-center text-gray-600 font-medium">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -187,23 +214,33 @@ function StudentRecords() {
                 </>
               ) : (
                 <>
-                  <td className="py-2 px-4 border-b border-gray-200">{student.name}</td>
-                  <td className="py-2 px-4 border-b border-gray-200">{student.roll}</td>
-                  <td className="py-2 px-4 border-b border-gray-200">{student.class}</td>
-                  <td className="py-2 px-4 border-b border-gray-200">{student.gender}</td>
-                  <td className="py-2 px-4 border-b border-gray-200 text-center space-x-2">
-                    <button
-                      onClick={() => handleEditClick(idx)}
-                      className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition cursor-pointer"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteStudent(student.id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition cursor-pointer"
-                    >
-                      Delete
-                    </button>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    {student.name}
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    {student.roll}
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    {student.class}
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    {student.gender}
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200 text-center">
+                    <div className="flex justify-center space-x-4">
+                      <button
+                        onClick={() => handleEditClick(idx)}
+                        className="border border-blue-300 text-blue-300 px-3 py-1 rounded hover:bg-blue-300 hover:text-white transition cursor-pointer"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteStudent(student.id)}
+                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition cursor-pointer"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </>
               )}
