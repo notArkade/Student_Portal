@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
   return (
@@ -7,16 +7,43 @@ const Sidebar = () => {
         Student App
       </div>
       <ul>
-        <Link to="/">
-          <li className="p-4 hover:bg-gray-100 transition-colors">
+        <li>
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `block p-4 transition-colors ${
+                isActive ? "bg-gray-100" : "hover:bg-gray-100"
+              }`
+            }
+          >
             Student Records
-          </li>
-        </Link>
-        <Link to="/attendanceRecords">
-          <li className="p-4 hover:bg-gray-100 transition-colors">
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/attendanceRecords"
+            className={({ isActive }) =>
+              `block p-4 transition-colors ${
+                isActive ? "bg-gray-100" : "hover:bg-gray-100"
+              }`
+            }
+          >
             Attendance Records
-          </li>
-        </Link>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/addAttendance"
+            className={({ isActive }) =>
+              `block p-4 transition-colors ${
+                isActive ? "bg-gray-100" : "hover:bg-gray-100"
+              }`
+            }
+          >
+            Add Attendance
+          </NavLink>
+        </li>
       </ul>
     </div>
   );

@@ -19,6 +19,18 @@ namespace PersonalProject.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveAttendance(AttendanceDto attendanceDto)
         {
+            var checkStudentAttendance = Context.Attendances.Where(r => r.AttendanceDate == attendanceDto.AttendanceDate && r.StudentId == attendanceDto.StudentId).Any();
+            
+            if(checkStudentAttendance)
+            {
+                return Ok(new
+                {
+                    message = "Attendance already done."
+                });
+            } else
+            {
+                
+
             Context.Attendances.Add(new Attendance()
             {
                 StudentId = attendanceDto.StudentId,
@@ -30,6 +42,7 @@ namespace PersonalProject.Server.Controllers
             {
                 message = "Attendance saved successfully."
             });
+            }
         }
 
         [HttpGet]

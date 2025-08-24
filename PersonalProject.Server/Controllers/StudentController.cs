@@ -84,12 +84,20 @@ namespace PersonalProject.Server.Controllers
 
         [HttpDelete]
 
-        public IActionResult DeleteStudetn(int id)
+        public IActionResult DeleteStudent(int id)
         {
             var Student = Context.Students.Where(r => r.Id == id).FirstOrDefault();
 
             if (Student != null)
             {
+
+                var studentAttendances = Context.Attendances.Where(r => r.StudentId == id).ToList();
+                foreach(var item in studentAttendances)
+                {
+                    Context.Remove(item);
+                    Context.SaveChanges();
+                }
+
                 Context.Remove(Student);
                 Context.SaveChanges();
             }
