@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 interface Student {
-  id?: number; // ✅ required for Update/Delete
+  id?: number; // required for Update/Delete
   name: string;
   class?: number;
   roll?: number;
