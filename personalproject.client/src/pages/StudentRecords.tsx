@@ -247,6 +247,7 @@ function StudentRecords() {
               onChange={handleChange}
               placeholder="Class"
               className="border border-gray-400 text-gray-600 p-1 rounded w-full"
+              required
             />
           </div>
           <div className="py-2 px-4">

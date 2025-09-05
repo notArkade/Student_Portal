@@ -9,7 +9,13 @@ interface Attendance {
   attendanceDate: string;
 }
 
+interface Student {
+  id: number;
+  name: string;
+}
+
 const AddAttendance = () => {
+  const [students, setStudents] = useState<Student[]>();
   const [addAttendance, setAddAttendance] = useState<Attendance>({
     studentId: 0,
     studentName: "",
@@ -18,23 +24,27 @@ const AddAttendance = () => {
   });
 
   useEffect(() => {
+    populateStudentData();
+  });
+
+  useEffect(() => {
     populateAttendanceData();
   }, []);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setAddAttendance({
-      ...addAttendance,
-      [name]:
-        name === "studentId" || name === "studentRoll"
-          ? value === ""
-            ? 0
-            : Number(value)
-          : value,
-    });
-  };
+  // const handleChange = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  // ) => {
+  //   const { name, value } = e.target;
+  //   setAddAttendance({
+  //     ...addAttendance,
+  //     [name]:
+  //       name === "studentId" || name === "studentRoll"
+  //         ? value === ""
+  //           ? 0
+  //           : Number(value)
+  //         : value,
+  //   });
+  // };
 
   const handleAddAttendance = async () => {
     const response = await fetch("https://localhost:7230/api/Attendance", {
@@ -53,7 +63,7 @@ const AddAttendance = () => {
       });
       populateAttendanceData();
     } else {
-      alert("Error adding attendance.");
+      alert("Fields required for adding attendance.");
     }
   };
 
@@ -63,15 +73,15 @@ const AddAttendance = () => {
     ) : (
       <div className="w-full bg-white overflow-hidden">
         {/* Header */}
-        <div className="grid grid-cols-4 bg-gray-100 font-medium text-gray-600">
-          <div className="py-3 px-4 text-center">Id</div>
+        <div className="grid grid-cols-3 bg-gray-100 font-medium text-gray-600">
+          {/* <div className="py-3 px-4 text-center">Id</div> */}
           <div className="py-3 px-4 text-center">Name</div>
-          <div className="py-3 px-4 text-center">Roll</div>
+          {/* <div className="py-3 px-4 text-center">Roll</div> */}
           <div className="py-3 px-4 text-center">Date</div>
-          {/* <div className="py-3 px-4 text-center">Actions</div> */}
+          <div className="py-3 px-4 text-center">Add</div>
         </div>
-        <div className="grid grid-cols-5 border-b border-gray-300 hover:bg-gray-50 transition text-blue-400">
-          <div className="py-2 px-4">
+        <div className="grid grid-cols-3 border-b border-gray-300 hover:bg-gray-50 transition text-blue-400">
+          {/* <div className="py-2 px-4">
             <input
               type="number"
               name="studentId" // ✅ matches state
@@ -80,18 +90,45 @@ const AddAttendance = () => {
               placeholder="Id"
               className="border border-gray-400 text-gray-600 p-1 rounded w-full"
             />
-          </div>
+          </div> */}
           <div className="py-2 px-4">
-            <input
+            {/* <input
               type="text"
               name="studentName"
               value={addAttendance.studentName || ""}
               onChange={handleChange}
               placeholder="Name"
+              className="border border-gray-400 text-gray-400 p-1 rounded w-full"
+            /> */}
+            <select
+              name="studentId"
+              value={
+                addAttendance.studentId === 0 ? "" : addAttendance.studentId
+              }
+              onChange={(e) => {
+                const selectedId = Number(e.target.value);
+                const selectedStudent = students?.find(
+                  (s) => s.id === selectedId
+                );
+
+                setAddAttendance({
+                  ...addAttendance,
+                  studentId: selectedId,
+                  studentName: selectedStudent?.name || "",
+                  studentRoll: selectedStudent?.id || 0, // change if roll !== id
+                });
+              }}
               className="border border-gray-400 text-gray-600 p-1 rounded w-full"
-            />
+            >
+              <option value="">Select Student</option>
+              {students?.map((student) => (
+                <option key={student.id} value={student.id}>
+                  {student.name}
+                </option>
+              ))}
+            </select>
           </div>
-          <div className="py-2 px-4">
+          {/* <div className="py-2 px-4">
             <input
               type="number"
               name="studentRoll"
@@ -100,7 +137,7 @@ const AddAttendance = () => {
               placeholder="Roll"
               className="border border-gray-400 text-gray-600 p-1 rounded w-full"
             />
-          </div>
+          </div> */}
           <div className="py-2 px-4">
             <DatePicker
               selected={
@@ -148,6 +185,16 @@ const AddAttendance = () => {
       setAddAttendance(data);
     } else {
       alert("Error fetching attendance data.");
+    }
+  }
+
+  async function populateStudentData() {
+    const response = await fetch("https://localhost:7230/Student");
+    if (response.ok) {
+      const data = await response.json();
+      setStudents(data);
+    } else {
+      console.error("Error fetching student names.");
     }
   }
 };
