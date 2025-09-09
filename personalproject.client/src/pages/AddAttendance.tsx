@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
+// import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 interface Attendance {
@@ -54,7 +54,8 @@ const AddAttendance = () => {
     });
 
     if (response.ok) {
-      alert("Attendance added!");
+      const data = await response.json();
+      alert(data.message);
       setAddAttendance({
         studentId: 0,
         studentName: "",
@@ -139,19 +140,16 @@ const AddAttendance = () => {
             />
           </div> */}
           <div className="py-2 px-4">
-            <DatePicker
-              selected={
-                addAttendance.attendanceDate
-                  ? new Date(addAttendance.attendanceDate)
-                  : null
-              }
-              onChange={(date: Date | null) =>
+            <input
+              type="date"
+              value={addAttendance.attendanceDate || ""}
+              onChange={(e) =>
                 setAddAttendance({
                   ...addAttendance,
-                  attendanceDate: date ? date.toISOString().split("T")[0] : "",
+                  attendanceDate: e.target.value, // already in yyyy-mm-dd format
                 })
               }
-              placeholderText="Select Date"
+              placeholder="Select Date"
               className="border border-gray-400 text-gray-600 p-1 rounded w-full"
             />
           </div>

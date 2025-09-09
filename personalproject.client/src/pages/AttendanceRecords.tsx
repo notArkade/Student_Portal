@@ -113,9 +113,9 @@ function AttendanceRecords() {
 
   return (
     <div className="w-[calc(100vw-16rem)]">
-      <h1 className="text-[#3674B5] text-4xl md:text-6xl uppercase tracking-[0.3em] font-extralight my-10">
+      {/* <h1 className="text-[#3674B5] text-4xl md:text-6xl uppercase tracking-[0.3em] font-extralight my-10">
         Attendance Data
-      </h1>
+      </h1> */}
       <div className="w-full">{attendanceTable}</div>
     </div>
   );
